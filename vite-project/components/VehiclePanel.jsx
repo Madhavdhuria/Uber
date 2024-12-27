@@ -87,7 +87,6 @@ const VehiclePanel = (props) => {
         </div>
       </div>
 
-      
     </div>
   );
 };

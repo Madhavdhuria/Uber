@@ -1,9 +1,9 @@
-const WaitingForDriver = ({setWaitngForDriver}) => {
+const WaitingForDriver = ({ setWaitingForDriver }) => {
   return (
     <div className="relative bg-white w-full max-w-lg mx-auto rounded-lg shadow-md">
       <button 
         className="w-full h-12 flex items-center justify-center border-b cursor-pointer hover:bg-gray-50 transition-colors"
-        onClick={() => {setWaitngForDriver(false)}}
+        onClick={() => { setWaitingForDriver(false) }}
       >
         <i className="text-3xl text-gray-500 ri-arrow-down-wide-line" />
       </button>
@@ -18,9 +18,9 @@ const WaitingForDriver = ({setWaitngForDriver}) => {
             />
           </div>
           <div className="text-right">
-            <h2 className="text-lg font-medium capitalize">Madhav</h2>
-            <h4 className="text-xl font-semibold">PB 22 3421</h4>
-            <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
+            <h2 className="text-lg font-medium capitalize">John Doe</h2>
+            <h4 className="text-xl font-semibold">DL 01 AB 1234</h4>
+            <p className="text-sm text-gray-600">Honda City</p>
           </div>
         </div>
 
@@ -28,24 +28,24 @@ const WaitingForDriver = ({setWaitngForDriver}) => {
           <div className="flex items-center gap-4 p-4 border-b">
             <i className="text-lg ri-map-pin-user-fill text-gray-500" />
             <div>
-              <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-sm text-gray-600">fazilka</p>
+              <h3 className="text-lg font-medium">123/45-B</h3>
+              <p className="text-sm text-gray-600">Mumbai</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4 p-4 border-b">
             <i className="text-lg ri-map-pin-2-fill text-gray-500" />
             <div>
-              <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-sm text-gray-600">chandigarh</p>
+              <h3 className="text-lg font-medium">789/01-C</h3>
+              <p className="text-sm text-gray-600">Pune</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4 p-4">
             <i className="text-lg ri-currency-line text-gray-500" />
             <div>
-              <h3 className="text-lg font-medium">₹500</h3>
-              <p className="text-sm text-gray-600">Cash Payment</p>
+              <h3 className="text-lg font-medium">₹450</h3>
+              <p className="text-sm text-gray-600">Online Payment</p>
             </div>
           </div>
         </div>
@@ -55,4 +55,3 @@ const WaitingForDriver = ({setWaitngForDriver}) => {
 }
 
 export default WaitingForDriver
-
