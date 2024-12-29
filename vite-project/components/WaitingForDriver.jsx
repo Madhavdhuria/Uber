@@ -1,9 +1,11 @@
-const WaitingForDriver = ({ setWaitingForDriver }) => {
+const WaitingForDriver = ({ setWaitngForDriver }) => {
   return (
     <div className="relative bg-white w-full max-w-lg mx-auto rounded-lg shadow-md">
-      <button 
+      <button
         className="w-full h-12 flex items-center justify-center border-b cursor-pointer hover:bg-gray-50 transition-colors"
-        onClick={() => { setWaitingForDriver(false) }}
+        onClick={() => {
+          setWaitngForDriver(false);
+        }}
       >
         <i className="text-3xl text-gray-500 ri-arrow-down-wide-line" />
       </button>
@@ -51,7 +53,7 @@ const WaitingForDriver = ({ setWaitingForDriver }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default WaitingForDriver
+export default WaitingForDriver;
