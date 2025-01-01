@@ -1,10 +1,9 @@
 const CreateRideSchema = require("../ZodSchema/zodRideSchema");
+const getFare = require("../services/ride.services");
 const RideServices = require("../services/ride.services");
 
 module.exports.CreateRide = async (req, res) => {
   try {
-    console.log(req.body);
-
     const result = CreateRideSchema.safeParse(req.body);
 
     if (!result.success) {
@@ -15,8 +14,7 @@ module.exports.CreateRide = async (req, res) => {
       });
     }
 
-
-    const { pickUp, destination,vehicleType } = req.body;
+    const { pickUp, destination, vehicleType } = req.body;
 
     const NewRide = await RideServices.CreateRide({
       user: req.user._id,
@@ -25,7 +23,7 @@ module.exports.CreateRide = async (req, res) => {
       vehicleType,
     });
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: "Ride created successfully",
       data: NewRide,
@@ -37,4 +35,19 @@ module.exports.CreateRide = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+module.exports.GetFare = async (req, res) => {
+  const { pickUp, destination } = req.query;
+  if (!pickUp || !destination) {
+    return res.status(401).json({
+      message: "All fields required!",
+    });
+  }
+
+  const fares = await getFare(pickUp, destination);
+
+  return res.status(201).json({
+    fares,
+  });
 };

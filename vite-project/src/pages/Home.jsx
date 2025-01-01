@@ -7,15 +7,19 @@ import VehiclePanel from "../../components/VehiclePanel";
 import ConfirmRidePanel from "../../components/ConfirmRidePanel";
 import LookingForDriver from "../../components/LookingForDriver";
 import WaitingForDriver from "../../components/WaitingFordriver";
+import axios from "axios";
 
 const Home = () => {
   const [pickup, setpickup] = useState("");
   const [destination, setdestination] = useState("");
+  const [activeInput, setActiveInput] = useState("");
   const [OpenPanel, setOpenPanel] = useState(false);
   const [vehiclepanel, setvehiclepanel] = useState(false);
   const [confirmridePanel, setconfirmridePanel] = useState(false);
   const [VehicleFound, setVehicleFound] = useState(false);
   const [WaitngForDriver, setWaitngForDriver] = useState(false);
+  const [fares, setfares] = useState({});
+  const [selectedVehicle, setselectedVehicle] = useState();
 
   const panelRef = useRef(null);
   const arrowref = useRef(null);
@@ -24,15 +28,50 @@ const Home = () => {
   const VehicleFoundRef = useRef(null);
   const WaitngForDriverref = useRef(null);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const submitHandler = async () => {
+    const res = await axios.get(`http://localhost:3000/rides/get-fares`, {
+      params: {
+        pickUp: pickup,
+        destination: destination,
+      },
+      withCredentials: true,
+    });
+
+    if (res.status === 201) {
+      setfares(res.data.fares);
+      setvehiclepanel(true);
+      setOpenPanel(false);
+    } else {
+      alert("something is up with server");
+    }
+  };
+
+  const CreateRide = async () => {
+    const res = await axios.post(
+      `http://localhost:3000/rides/create`,
+      {
+        pickUp: pickup,
+        destination: destination,
+        vehicleType: selectedVehicle,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (res.status === 201) {
+      console.log(res.data);
+    } else {
+      alert("something is up with server");
+    }
   };
 
   useGSAP(
     function () {
       if (OpenPanel) {
         gsap.to(panelRef.current, {
-          height: "70%",
+          height: "60%",
+          overflow: "auto",
         });
         gsap.to(arrowref.current, {
           opacity: "1",
@@ -124,7 +163,7 @@ const Home = () => {
         />
       </div>
       <div className="flex flex-col justify-end h-screen absolute top-0 w-full">
-        <div className="h-[30%] p-6 bg-white relative">
+        <div className="h-[40%] p-6 bg-white relative">
           <h5
             ref={arrowref}
             onClick={() => setOpenPanel(false)}
@@ -133,10 +172,13 @@ const Home = () => {
             <i className="ri-arrow-down-wide-line"></i>
           </h5>
           <h4 className="text-2xl font-semibold">Find a trip</h4>
-          <form onSubmit={submitHandler}>
+          <form>
             <input
               value={pickup}
-              onClick={() => setOpenPanel(true)}
+              onClick={() => {
+                setOpenPanel(true);
+                setActiveInput("pickup");
+              }}
               onChange={(e) => setpickup(e.target.value)}
               className="bg-gray-200 px-12 py-2 text-base rounded-lg w-full mb-3 mt-5"
               type="text"
@@ -144,19 +186,33 @@ const Home = () => {
             />
             <input
               value={destination}
-              onClick={() => setOpenPanel(true)}
+              onClick={() => {
+                setOpenPanel(true);
+                setActiveInput("destination");
+              }}
               onChange={(e) => setdestination(e.target.value)}
               className="bg-gray-200 px-12 py-2 text-base rounded-lg w-full"
               type="text"
               placeholder="Enter your drop location"
             />
           </form>
+          <button
+            onClick={submitHandler}
+            className="focus:outline-none text-white w-full mt-4 bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            Find a Trip
+          </button>
         </div>
 
         <div ref={panelRef} className="bg-white h-0 transition-all">
           <Locationsearchpanel
             setOpenPanel={setOpenPanel}
-            setvehiclepanel={setvehiclepanel}
+            setVehiclePanel={setvehiclepanel}
+            pickup={pickup}
+            setPickup={setpickup}
+            destination={destination}
+            setDestination={setdestination}
+            activeInput={activeInput}
           />
         </div>
 
@@ -167,6 +223,8 @@ const Home = () => {
           <VehiclePanel
             setConfirmRidePanel={setconfirmridePanel}
             setVehiclePanel={setvehiclepanel}
+            fares={fares}
+            setselectedVehicle={setselectedVehicle}
           />
         </div>
 
@@ -175,9 +233,14 @@ const Home = () => {
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
         >
           <ConfirmRidePanel
+            pickUp={pickup}
+            destination={destination}
             setconfirmridePanel={setconfirmridePanel}
             setVehiclePanel={setvehiclepanel}
             setVehicleFound={setVehicleFound}
+            fares={fares}
+            selectedVehicle={selectedVehicle}
+            CreateRide={CreateRide}
           />
         </div>
 
@@ -185,7 +248,9 @@ const Home = () => {
           ref={VehicleFoundRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <LookingForDriver setVehicleFound={setVehicleFound} />
+          <LookingForDriver setVehicleFound={setVehicleFound}
+           pickup={pickup} destination={destination} selectedVehicle={selectedVehicle} fares={fares}  
+            />
         </div>
 
         <div

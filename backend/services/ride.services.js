@@ -47,6 +47,8 @@ async function getFare(pickup, destination) {
   return fare;
 }
 
+module.exports=getFare;
+
 module.exports.CreateRide = async ({
   user,
   pickUp,

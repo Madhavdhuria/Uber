@@ -34,6 +34,8 @@ module.exports.getAutoCompeteSuggestions = async (req, res) => {
     }
     
   try {
+    console.log(input);
+    
     const Suggestions = await mapservice.getAutoCompeteSuggestions(input);
     return res.status(200).json(Suggestions);
   } catch (error) {
