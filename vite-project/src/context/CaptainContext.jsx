@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 
 
 
-export const captainContextdata = createContext();
+export const CaptainContextdata = createContext();
 const initialCaptainState = {
   fullName: {
     firstName: "",
@@ -29,11 +29,11 @@ const CaptainContext = ({ children }) => {
   
 
   return (
-    <captainContextdata.Provider
+    <CaptainContextdata.Provider
       value={{ captain, setcaptain }}
     >
       {children}
-    </captainContextdata.Provider>
+    </CaptainContextdata.Provider>
   );
 };
 

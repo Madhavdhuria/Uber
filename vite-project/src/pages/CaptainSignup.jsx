@@ -2,10 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useContext } from "react";
-import { captainContextdata } from "../context/CaptainContext";
+import { CaptainContextdata } from "../context/CaptainContext";
 
 const RegistrationPage = () => {
-  const { setcaptain } = useContext(captainContextdata);
+  const { setcaptain } = useContext(CaptainContextdata);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -220,12 +220,12 @@ const RegistrationPage = () => {
                   <option value="" disabled>
                     Select Vehicle Type
                   </option>
-                  <option value="Car">Car</option>
+                  <option value="car">car</option>
                   <option value="motorcycle">motorcycle</option>
                   <option value="auto">auto</option>
                 </select>
               </div>
-            </div>
+            </div>w
 
             <div>
               <button

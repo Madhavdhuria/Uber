@@ -1,7 +1,7 @@
 const CaptainModel = require("../models/captain.model");
 const captainValidationSchema = require("../ZodSchema/ZodCaptainSchema");
 const createCaptain = require("../services/captain.service");
-const BlackListTokenModel=require("../models/blacklistToken.model");
+const BlackListTokenModel = require("../models/blacklistToken.model");
 
 module.exports.RegisterCaptain = async (req, res) => {
   try {
@@ -40,9 +40,9 @@ module.exports.RegisterCaptain = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      sameSite: 'Lax', 
-      path: "/", 
-      maxAge: 24 * 60 * 60 * 1000 
+      sameSite: "Lax",
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({
@@ -64,7 +64,6 @@ module.exports.LoginCaptain = async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log(req.body);
-    
 
     if (!email || !password) {
       return res.status(400).json({
@@ -91,11 +90,10 @@ module.exports.LoginCaptain = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      sameSite: 'Lax', 
-      path: "/", 
-      maxAge: 24 * 60 * 60 * 1000 
+      sameSite: "Lax",
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000,
     });
-
 
     return res.status(201).json({
       message: "Login successful",
@@ -118,7 +116,7 @@ module.exports.getCaptainProfile = async (req, res) => {
       });
     }
 
-   return res.json({
+    return res.status(201).json({
       message: "captain profile retrieved successfully",
       captain: req.captain,
     });

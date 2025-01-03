@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import { useContext } from "react";
-import { captainContextdata } from "../context/CaptainContext";
+import { CaptainContextdata } from "../context/CaptainContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function CaptainLogin() {
   const navigate = useNavigate();
-  const { setcaptain } = useContext(captainContextdata);
+  const { setcaptain } = useContext(CaptainContextdata);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +19,7 @@ export default function CaptainLogin() {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/captains/login`,
-        {email,password},
+        { email, password },
         {
           withCredentials: true,
         }

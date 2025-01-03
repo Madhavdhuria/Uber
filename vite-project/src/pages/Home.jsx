@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -7,7 +7,11 @@ import VehiclePanel from "../../components/VehiclePanel";
 import ConfirmRidePanel from "../../components/ConfirmRidePanel";
 import LookingForDriver from "../../components/LookingForDriver";
 import WaitingForDriver from "../../components/WaitingFordriver";
+import { useContext } from "react";
+import { SocketContext } from "../context/SocketContext";
+import { UserContextData } from "../context/UserContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [pickup, setpickup] = useState("");
@@ -27,6 +31,38 @@ const Home = () => {
   const ConfirmRideref = useRef(null);
   const VehicleFoundRef = useRef(null);
   const WaitngForDriverref = useRef(null);
+
+  const { socket } = useContext(SocketContext);
+  const { setuser } = useContext(UserContextData);
+  const navigate = useNavigate();
+
+  const GetUser = async () => {
+    const res = await axios.get(`http://localhost:3000/users/profile`, {
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (res.status === 201) {
+      console.log(res.data);
+      setuser(res.data.user);
+      socket.emit("join", { userType: "user", userId: res.data.user._id });
+    } else {
+      setuser({
+        fullName: {
+          firstName: "",
+          lastName: "",
+        },
+        email: "",
+      });
+      navigate("/userlogin");
+    }
+  };
+
+  useEffect(() => {
+    GetUser();
+  }, []);
 
   const submitHandler = async () => {
     const res = await axios.get(`http://localhost:3000/rides/get-fares`, {
@@ -248,9 +284,13 @@ const Home = () => {
           ref={VehicleFoundRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <LookingForDriver setVehicleFound={setVehicleFound}
-           pickup={pickup} destination={destination} selectedVehicle={selectedVehicle} fares={fares}  
-            />
+          <LookingForDriver
+            setVehicleFound={setVehicleFound}
+            pickup={pickup}
+            destination={destination}
+            selectedVehicle={selectedVehicle}
+            fares={fares}
+          />
         </div>
 
         <div

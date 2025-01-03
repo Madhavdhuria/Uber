@@ -40,10 +40,11 @@ module.exports.RegisterUser = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      sameSite: 'Lax', 
-      path: "/", 
+      sameSite: 'Lax',
+      path: "/",
       maxAge: 24 * 60 * 60 * 1000 
-    });
+  });
+  
 
 
     return res.status(201).json({
@@ -95,10 +96,10 @@ module.exports.UserLogin = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      sameSite: 'Lax', 
-      path: "/", 
+      sameSite: 'Lax',
+      path: "/",
       maxAge: 24 * 60 * 60 * 1000 
-    });
+  });
 
     res.status(200).json({
       message: "Login successful",
@@ -129,7 +130,7 @@ module.exports.getUserProfile = async (req, res) => {
       });
     }
 
-    return res.json({
+    return res.status(201).json({
       message: "User profile retrieved successfully",
       user: req.user,
     });

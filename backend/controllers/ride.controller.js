@@ -1,6 +1,9 @@
 const CreateRideSchema = require("../ZodSchema/zodRideSchema");
 const getFare = require("../services/ride.services");
 const RideServices = require("../services/ride.services");
+const Mapservices = require("../services/maps.service");
+const { sendMessagetoSocketId } = require("../socket");
+const RideModel = require("../models/ride.model");
 
 module.exports.CreateRide = async (req, res) => {
   try {
@@ -21,6 +24,30 @@ module.exports.CreateRide = async (req, res) => {
       pickUp,
       destination,
       vehicleType,
+    });
+    const pickUpCoordinates = await Mapservices.getAddressCoordinate(pickUp);
+
+    const CaptainsinRadius = await Mapservices.getCaptainsInTheRadius(
+      pickUpCoordinates.lat,
+      pickUpCoordinates.lng,
+      2000
+    );
+    NewRide.otp = "";
+
+    console.log("NewRide:-", NewRide);
+    console.log("CaptainsinRadius:-", CaptainsinRadius);
+
+    const ridewithUser = await RideModel.findOne({ _id: NewRide._id }).populate(
+      "user"
+    );
+
+    console.log("ridewithUser:-", ridewithUser);
+
+    CaptainsinRadius.map((captain) => {
+      sendMessagetoSocketId(captain.socketId, {
+        event: "new-ride",
+        data: ridewithUser,
+      });
     });
 
     return res.status(201).json({

@@ -1,4 +1,5 @@
 const axios = require("axios");
+const CaptainModel =require("../models/captain.model")
 
 module.exports.getAddressCoordinate = async (address) => {
   const apikey = process.env.MAP;
@@ -71,3 +72,19 @@ module.exports.getAutoCompeteSuggestions = async (input) => {
     throw error;
   }
 };
+
+
+module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
+
+  const captains = await CaptainModel.find({
+      location: {
+          $geoWithin: {
+              $centerSphere: [ [ ltd, lng ], radius / 6371 ]
+          }
+      }
+  });
+
+  return captains;
+
+
+}

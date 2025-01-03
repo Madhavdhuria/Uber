@@ -1,5 +1,5 @@
-import { useContext, useRef, useState } from "react";
-import { captainContextdata } from "../context/CaptainContext";
+import { useContext, useEffect, useRef, useState } from "react";
+import { CaptainContextdata } from "../context/CaptainContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CaptainDetails from "../../components/CaptainDetails";
@@ -7,10 +7,13 @@ import RidePopUp from "../../components/RidePopUp";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ConfirmRidePopUp from "../../components/ConfirmRidePopUp";
+import { SocketContext } from "../context/SocketContext";
 
 const CaptainHome = () => {
-  const [ridePopupPanel, setRidePopupPanel] = useState(true);
+  const [ridePopupPanel, setRidePopupPanel] = useState(false);
   const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false);
+  const [Ride, setRide] = useState(null);
+  const { socket } = useContext(SocketContext);
 
   const ridePopupPanelRef = useRef(null);
   const confirmRidePopupPanelRef = useRef(null);
@@ -45,9 +48,67 @@ const CaptainHome = () => {
     [confirmRidePopupPanel]
   );
 
+  const GetcaptainDetails = async () => {
+    const res = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/captains/profile`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (res.status === 201) {
+      setcaptain(res.data.captain);
+    } else {
+      localStorage.removeItem("token");
+      navigate("/captainlogin");
+    }
+  };
+
+  socket.on("new-ride", (data) => {
+    console.log(data);
+    setRide(data);
+    setRidePopupPanel(true);
+  });
+
+  useEffect(() => {
+    let locationInterval;
+    async function start() {
+      await GetcaptainDetails();
+      console.log(captain);
+      socket.emit("join", {
+        userId: captain._id,
+        userType: "captain",
+      });
+      const updateLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            socket.emit("update-location-captain", {
+              userId: captain._id,
+              location: {
+                ltd: position.coords.latitude,
+                lng: position.coords.longitude,
+              },
+            });
+          });
+        }
+      };
+
+      locationInterval = setInterval(updateLocation, 10000);
+      updateLocation();
+    }
+
+    start();
+    return () => clearInterval(locationInterval);
+  }, []);
+
   const navigate = useNavigate();
-  const { setcaptain } = useContext(captainContextdata);
+  const { captain, setcaptain } = useContext(CaptainContextdata);
+
   const CaptainLogout = async () => {
+    console.log("hi there");
+
     try {
       let res = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/captains/logout`,
@@ -120,6 +181,7 @@ const CaptainHome = () => {
         className="fixed w-full z-10 bottom-0  bg-white px-3 py-10 pt-12"
       >
         <RidePopUp
+        ride={Ride}
           setRidePopupPanel={setRidePopupPanel}
           setConfirmRidePopupPanel={setConfirmRidePopupPanel}
         />
