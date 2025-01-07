@@ -24,6 +24,7 @@ const Home = () => {
   const [WaitngForDriver, setWaitngForDriver] = useState(false);
   const [fares, setfares] = useState({});
   const [selectedVehicle, setselectedVehicle] = useState();
+  const [Ride, setRide] = useState();
 
   const panelRef = useRef(null);
   const arrowref = useRef(null);
@@ -40,7 +41,7 @@ const Home = () => {
     const res = await axios.get(`http://localhost:3000/users/profile`, {
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
 
@@ -59,6 +60,18 @@ const Home = () => {
       navigate("/userlogin");
     }
   };
+
+  socket.on("ride-accept", (data) => {
+    setRide(data);
+    setVehicleFound(false);
+    setWaitngForDriver(true);
+  });
+
+  socket.on("start-ride", (data) => {
+    console.log("ride:- ",data);
+    
+    navigate("/riding", { state: { ride: data } });
+  });
 
   useEffect(() => {
     GetUser();
@@ -297,7 +310,10 @@ const Home = () => {
           ref={WaitngForDriverref}
           className="fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12"
         >
-          <WaitingForDriver setWaitngForDriver={setWaitngForDriver} />
+          <WaitingForDriver
+            Ride={Ride}
+            setWaitngForDriver={setWaitngForDriver}
+          />
         </div>
       </div>
     </main>

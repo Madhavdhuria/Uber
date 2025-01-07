@@ -78,3 +78,43 @@ module.exports.GetFare = async (req, res) => {
     fares,
   });
 };
+
+module.exports.RideAccept = async (req, res) => {
+  try {
+    const captain = req.captain;
+    const { RideId, userId } = req.body;
+
+    const Ride = await RideServices.UpdateRide(captain._id, RideId);
+
+    sendMessagetoSocketId(userId, {
+      event: "ride-accept",
+      data: Ride,
+    });
+
+    return res.status(201).json({
+      success: true,
+      Ride,
+    });
+  } catch (error) {}
+};
+
+module.exports.StartRide = async (req, res) => {
+  const { otp, RideId } = req.body;
+
+  if (!otp) {
+    res.status(203).json({
+      message: "Otp required",
+    });
+  }
+
+  const Ride = await RideServices.StartRide(otp, RideId);
+
+  sendMessagetoSocketId(Ride.user.socketId, {
+    event: "start-ride",
+    data: Ride,
+  });
+
+  return res.status(201).json({
+    Ride,
+  });
+};

@@ -49,6 +49,7 @@ function initialiseSocket(server) {
 
 function sendMessagetoSocketId(socketId, message) {
   console.log("hi there");
+  console.log(`id: ${socketId} , data:-${message.data}`);
 
   if (io) {
     io.to(socketId).emit(message.event, message.data);

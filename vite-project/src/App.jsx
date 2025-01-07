@@ -9,7 +9,7 @@ import UserProtected from "./pages/UserProtected"
 import CaptainProtected from "./pages/captainProtected"
 import CaptainHome from "./pages/CaptainHome";
 import Riding from "./pages/Riding";
-import CaptainRiding from "./pages/captainRiding";
+import CaptainRiding from "./pages/CaptainRiding";
 const App = () => {
   return (
     <Routes>

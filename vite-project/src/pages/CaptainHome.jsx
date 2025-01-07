@@ -71,7 +71,33 @@ const CaptainHome = () => {
     setRide(data);
     setRidePopupPanel(true);
   });
-
+  async function RideAccept() {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/rides/Rideaccept`,
+        {
+          // Body of the POST request
+          RideId: Ride._id,
+          userId:Ride.user.socketId
+        },
+        {
+          // Configuration object for headers and other options
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+  
+      if (res.status === 201) {
+        setConfirmRidePopupPanel(true);
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.error("Error accepting ride:", error.response?.data || error.message);
+    }
+  }
+  
   useEffect(() => {
     let locationInterval;
     async function start() {
@@ -181,9 +207,10 @@ const CaptainHome = () => {
         className="fixed w-full z-10 bottom-0  bg-white px-3 py-10 pt-12"
       >
         <RidePopUp
-        ride={Ride}
+          ride={Ride}
           setRidePopupPanel={setRidePopupPanel}
           setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+          RideAccept={RideAccept}
         />
       </div>
       <div
@@ -191,6 +218,7 @@ const CaptainHome = () => {
         className="fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
       >
         <ConfirmRidePopUp
+          ride={Ride}
           setConfirmRidePopupPanel={setConfirmRidePopupPanel}
           setRidePopupPanel={setRidePopupPanel}
         />

@@ -1,5 +1,6 @@
 const { getDistanceTime } = require("./maps.service");
 const RideModel = require("../models/ride.model");
+const { sendMessagetoSocketId } = require("../socket");
 
 async function getFare(pickup, destination) {
   if (!pickup || !destination) {
@@ -47,7 +48,7 @@ async function getFare(pickup, destination) {
   return fare;
 }
 
-module.exports=getFare;
+module.exports = getFare;
 
 module.exports.CreateRide = async ({
   user,
@@ -68,8 +69,56 @@ module.exports.CreateRide = async ({
     destination,
     otp,
     fare: fare[vehicleType],
-    vehicleType
+    vehicleType,
   });
 
   return ride;
+};
+
+module.exports.UpdateRide = async (CaptainId, RideId) => {
+  try {
+    // Update the ride with the provided RideId
+    console.log("RideId :", RideId);
+
+    const Ride = await RideModel.findByIdAndUpdate(
+      RideId,
+      {
+        captain: CaptainId,
+        status: "accepted",
+      },
+      {
+        new: true,
+        select: "+otp",
+      }
+    ).populate("captain");
+
+    if (!Ride) {
+      throw new Error("Ride not found or unable to update");
+    }
+
+    console.log("Updated Ride:", Ride);
+
+    return Ride;
+  } catch (error) {
+    console.error("Error updating ride:", error.message);
+    throw new Error(error.message);
+  }
+};
+
+module.exports.StartRide = async (otp, Rideid) => {
+  try {
+    const ride = await RideModel.findById(Rideid).select("+otp").populate('user').populate('captain');
+    console.log(ride);
+
+    if (ride.otp === otp) {
+      ride.status = "ongoing";
+    } else {
+      throw Error("Wrong otp!");
+    }
+
+    return ride;
+  } catch (error) {
+    console.log(error);
+    throw Error("Failed to Update Ride in Start Ride");
+  }
 };
