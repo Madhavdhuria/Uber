@@ -13,105 +13,71 @@ const CaptainHome = () => {
   const [ridePopupPanel, setRidePopupPanel] = useState(false);
   const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false);
   const [Ride, setRide] = useState(null);
+  const { captain, setcaptain } = useContext(CaptainContextdata);
   const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
 
   const ridePopupPanelRef = useRef(null);
   const confirmRidePopupPanelRef = useRef(null);
 
   useGSAP(
     function () {
-      if (ridePopupPanel) {
-        gsap.to(ridePopupPanelRef.current, {
-          transform: "translateY(0)",
-        });
-      } else {
-        gsap.to(ridePopupPanelRef.current, {
-          transform: "translateY(100%)",
-        });
-      }
+      gsap.to(ridePopupPanelRef.current, {
+        transform: ridePopupPanel ? "translateY(0)" : "translateY(100%)",
+      });
     },
     [ridePopupPanel]
   );
 
   useGSAP(
     function () {
-      if (confirmRidePopupPanel) {
-        gsap.to(confirmRidePopupPanelRef.current, {
-          transform: "translateY(0)",
-        });
-      } else {
-        gsap.to(confirmRidePopupPanelRef.current, {
-          transform: "translateY(100%)",
-        });
-      }
+      gsap.to(confirmRidePopupPanelRef.current, {
+        transform: confirmRidePopupPanel ? "translateY(0)" : "translateY(100%)",
+      });
     },
     [confirmRidePopupPanel]
   );
 
-  const GetcaptainDetails = async () => {
-    const res = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/captains/profile`,
-      {
+  const GetCaptainDetails = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+      });
+
+      if (res.status === 201) {
+        setcaptain(res.data.captain);
+      } else {
+        throw new Error("Unauthorized");
       }
-    );
-    if (res.status === 201) {
-      setcaptain(res.data.captain);
-    } else {
+    } catch (error) {
+      console.error("Error fetching captain details:", error);
       localStorage.removeItem("token");
       navigate("/captainlogin");
     }
   };
 
-  socket.on("new-ride", (data) => {
-    console.log(data);
-    setRide(data);
-    setRidePopupPanel(true);
-  });
-  async function RideAccept() {
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/rides/Rideaccept`,
-        {
-          // Body of the POST request
-          RideId: Ride._id,
-          userId:Ride.user.socketId
-        },
-        {
-          // Configuration object for headers and other options
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withCredentials: true,
-        }
-      );
-  
-      if (res.status === 201) {
-        setConfirmRidePopupPanel(true);
-      }
-    } catch (error) {
-      console.error("Error accepting ride:", error.response?.data || error.message);
-    }
-  }
-  
   useEffect(() => {
     let locationInterval;
-    async function start() {
-      await GetcaptainDetails();
+
+    const start = async () => {
+      await GetCaptainDetails();
+      if (!captain || !captain._id) return;
+
       socket.emit("join", {
         userId: captain._id,
         userType: "captain",
       });
+
       const updateLocation = () => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
             socket.emit("update-location-captain", {
               userId: captain._id,
               location: {
-                ltd: position.coords.latitude,
+                lat: position.coords.latitude,
                 lng: position.coords.longitude,
               },
             });
@@ -121,20 +87,40 @@ const CaptainHome = () => {
 
       locationInterval = setInterval(updateLocation, 10000);
       updateLocation();
-    }
+    };
 
     start();
     return () => clearInterval(locationInterval);
-  }, []);
-
-  const navigate = useNavigate();
-  const { captain, setcaptain } = useContext(CaptainContextdata);
+  }, [captain?._id]);
 
   const CaptainLogout = async () => {
-
     try {
-      let res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/captains/logout`,
+      let res = await axios.get(`${import.meta.env.VITE_BASE_URL}/captains/logout`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
+
+      if (res.status === 200) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        setcaptain(null);
+        navigate("/captainlogin");
+      }
+    } catch (err) {
+      console.error("Error logging out captain:", err.message);
+    }
+  };
+
+  const RideAccept = async () => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/rides/Rideaccept`,
+        {
+          RideId: Ride?._id,
+          userId: Ride?.user?.socketId,
+        },
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -143,65 +129,47 @@ const CaptainHome = () => {
         }
       );
 
-      if (res.status === 200) {
-        localStorage.removeItem("token");
-        setcaptain({
-          fullName: {
-            firstName: "",
-            lastName: "",
-          },
-          email: "",
-          password: "",
-          socketId: "",
-          status: "inactive",
-          vehicle: {
-            color: "",
-            plate: "",
-            capacity: "",
-            vehicleType: "motorcycle",
-          },
-          location: {
-            lat: null,
-            lng: null,
-          },
-        });
-        navigate("/captainlogin");
+      if (res.status === 201) {
+        setConfirmRidePopupPanel(true);
       }
-    } catch (err) {
-      console.error("Error logging out captain:", err.message);
+    } catch (error) {
+      console.error("Error accepting ride:", error.response?.data || error.message);
     }
   };
+
+  socket.on("new-ride", (data) => {
+    setRide(data);
+    setRidePopupPanel(true);
+  });
+
   return (
     <div className="h-screen">
       <div className="fixed p-6 top-0 flex items-center justify-between w-screen">
         <img
           className="w-16"
           src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
-          alt=""
+          alt="Uber Logo"
         />
-        <button
-          onClick={() => {
-            CaptainLogout();
-          }}
-          to="/home"
-          className="h-10 w-10 bg-white rounded-full"
-        >
+        <button onClick={CaptainLogout} className="h-10 w-10 bg-white rounded-full">
           <i className="text-lg font-medium ri-logout-box-r-line"></i>
         </button>
       </div>
+
       <div className="h-3/5">
         <img
           className="h-full w-full object-cover"
           src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt=""
+          alt="Map Animation"
         />
       </div>
+
       <div className="h-2/5 p-4">
         <CaptainDetails />
       </div>
+
       <div
         ref={ridePopupPanelRef}
-        className="fixed w-full z-10 bottom-0  bg-white px-3 py-10 pt-12"
+        className="fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-12"
       >
         <RidePopUp
           ride={Ride}
@@ -210,6 +178,7 @@ const CaptainHome = () => {
           RideAccept={RideAccept}
         />
       </div>
+
       <div
         ref={confirmRidePopupPanelRef}
         className="fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"

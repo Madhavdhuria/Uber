@@ -22,6 +22,7 @@ const initialCaptainState = {
     lat: null,
     lng: null,
   },
+  _id:null
 };
 
 const CaptainContext = ({ children }) => {
