@@ -1,5 +1,4 @@
 const WaitingForDriver = ({ setWaitngForDriver, Ride }) => {
-  console.log(Ride);
 
   return (
     <div className="relative bg-white w-full max-w-lg mx-auto rounded-lg shadow-md">

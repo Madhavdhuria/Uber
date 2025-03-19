@@ -22,13 +22,15 @@ export default function LoginPage() {
         {
           email,
           password,
-        },{
-          withCredentials:true
+        },
+        {
+          withCredentials: true,
         }
       );
 
       if (res.status === 200) {
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", "user");
         setuser(res.data.user);
         navigate("/home");
       }

@@ -91,7 +91,6 @@ const CaptainHome = () => {
   
       if (res.status === 201) {
         setConfirmRidePopupPanel(true);
-        console.log(res.data);
       }
     } catch (error) {
       console.error("Error accepting ride:", error.response?.data || error.message);
@@ -102,7 +101,6 @@ const CaptainHome = () => {
     let locationInterval;
     async function start() {
       await GetcaptainDetails();
-      console.log(captain);
       socket.emit("join", {
         userId: captain._id,
         userType: "captain",
@@ -133,7 +131,6 @@ const CaptainHome = () => {
   const { captain, setcaptain } = useContext(CaptainContextdata);
 
   const CaptainLogout = async () => {
-    console.log("hi there");
 
     try {
       let res = await axios.get(

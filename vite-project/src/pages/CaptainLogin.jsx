@@ -28,6 +28,7 @@ export default function CaptainLogin() {
       if (res.status === 201) {
         setcaptain(res.data.captain);
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", "captain");
         navigate("/captain-home");
       }
     } catch (error) {

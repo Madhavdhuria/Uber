@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
+
 const FinishRide = (props) => {
+    const navigate=useNavigate();
     return (
         <div>
             <h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -39,7 +43,7 @@ const FinishRide = (props) => {
 
                 <div className='mt-10 w-full'>
 
-                    <button
+                    <button onClick={()=>{navigate("/captain-home")}}
                         className='w-full mt-5 flex  text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Finish Ride</button>
                 </div>
             </div>

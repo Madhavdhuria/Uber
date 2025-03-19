@@ -4,9 +4,6 @@ const Riding = () => {
   const location = useLocation(); // Use the useLocation hook
   const { ride } = location.state || {}; // Access state safely
 
-  console.log("ride:- ", ride);
-  console.log(location.state);
-
   return (
     <div className="h-screen">
       <Link
@@ -60,7 +57,7 @@ const Riding = () => {
             </div>
           </div>
         </div>
-        <button className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg">
+        <button className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg" >
           Make a Payment
         </button>
       </div>

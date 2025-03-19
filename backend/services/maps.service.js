@@ -25,7 +25,6 @@ module.exports.getAddressCoordinate = async (address) => {
 };
 
 module.exports.getDistanceTime = async (origin, destination) => {
-  console.log(origin, destination);
   if (!origin || !destination) {
     throw new Error("Origin and distance Required");
   }

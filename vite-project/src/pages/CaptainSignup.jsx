@@ -46,8 +46,7 @@ const RegistrationPage = () => {
 
       if (res.status === 201) {
         localStorage.setItem("token", res.data.token);
-        console.log(res.data);
-        
+        localStorage.setItem("role", "captain");
         setcaptain(res.data.newCaptain);
         navigate("/captain-home");
       }

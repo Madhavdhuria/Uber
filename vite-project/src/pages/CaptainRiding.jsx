@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -9,8 +9,7 @@ const CaptainRiding = () => {
   const [finishRidePanel, setFinishRidePanel] = useState(false);
   const finishRidePanelRef = useRef(null);
   const rideData = location.state?.ride; // Safely access ride data
-
-  console.log("ridedata :- ", rideData);
+const navigate=useNavigate();
 
   useGSAP(
     function () {
@@ -67,7 +66,7 @@ const CaptainRiding = () => {
           <i className="text-3xl text-gray-800 ri-arrow-up-wide-line"></i>
         </h5>
         <h4 className="text-xl font-semibold">{"4 KM away"}</h4>
-        <button className="bg-green-600 text-white font-semibold p-3 px-10 rounded-lg">
+        <button className="bg-green-600 text-white font-semibold p-3 px-10 rounded-lg" onClick={()=>{navigate("/captain-home")}}>
           Complete Ride
         </button>
       </div>

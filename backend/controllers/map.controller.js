@@ -3,7 +3,6 @@ const  mapservice  = require("../services/maps.service");
 module.exports.getCoordinates = async (req, res) => {
     const { address } = req.query;    
   try {
-    console.log(address);
     const coordinates = await mapservice.getAddressCoordinate(address);
     return res.status(200).json(coordinates);
   } catch (error) {
@@ -34,7 +33,6 @@ module.exports.getAutoCompeteSuggestions = async (req, res) => {
     }
     
   try {
-    console.log(input);
     
     const Suggestions = await mapservice.getAutoCompeteSuggestions(input);
     return res.status(200).json(Suggestions);

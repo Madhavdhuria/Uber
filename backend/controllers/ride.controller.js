@@ -34,14 +34,9 @@ module.exports.CreateRide = async (req, res) => {
     );
     NewRide.otp = "";
 
-    console.log("NewRide:-", NewRide);
-    console.log("CaptainsinRadius:-", CaptainsinRadius);
-
     const ridewithUser = await RideModel.findOne({ _id: NewRide._id }).populate(
       "user"
     );
-
-    console.log("ridewithUser:-", ridewithUser);
 
     CaptainsinRadius.map((captain) => {
       sendMessagetoSocketId(captain.socketId, {

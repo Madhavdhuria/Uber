@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const ConfirmRidePopUp = (props) => {
   const [otp, setOtp] = useState("");
-  console.log(props);
   const navigate = useNavigate();
 
   const submitHander = async () => {
@@ -24,7 +23,6 @@ const ConfirmRidePopUp = (props) => {
       );
 
       if (res.status == 201) {
-        console.log("ConfirmRidePopUp :- ", res.data.Ride);
         navigate("/captain-riding", { state: { ride: res.data.Ride } });
       }
     } catch (error) {

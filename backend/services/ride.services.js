@@ -77,8 +77,6 @@ module.exports.CreateRide = async ({
 
 module.exports.UpdateRide = async (CaptainId, RideId) => {
   try {
-    // Update the ride with the provided RideId
-    console.log("RideId :", RideId);
 
     const Ride = await RideModel.findByIdAndUpdate(
       RideId,
@@ -96,7 +94,6 @@ module.exports.UpdateRide = async (CaptainId, RideId) => {
       throw new Error("Ride not found or unable to update");
     }
 
-    console.log("Updated Ride:", Ride);
 
     return Ride;
   } catch (error) {
@@ -108,7 +105,6 @@ module.exports.UpdateRide = async (CaptainId, RideId) => {
 module.exports.StartRide = async (otp, Rideid) => {
   try {
     const ride = await RideModel.findById(Rideid).select("+otp").populate('user').populate('captain');
-    console.log(ride);
 
     if (ride.otp === otp) {
       ride.status = "ongoing";
@@ -118,7 +114,6 @@ module.exports.StartRide = async (otp, Rideid) => {
 
     return ride;
   } catch (error) {
-    console.log(error);
     throw Error("Failed to Update Ride in Start Ride");
   }
 };

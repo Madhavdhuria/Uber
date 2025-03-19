@@ -35,6 +35,7 @@ export default function SignupPage() {
 
       if (res.status === 201) {
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", "user");
         setuser(res.data.user);
         navigate("/home");
       }
