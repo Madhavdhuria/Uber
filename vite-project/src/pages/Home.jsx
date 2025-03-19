@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -9,7 +9,6 @@ import LookingForDriver from "../../components/LookingForDriver";
 import WaitingForDriver from "../../components/WaitingFordriver";
 import { useContext } from "react";
 import { SocketContext } from "../context/SocketContext";
-import { UserContextData } from "../context/UserContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -34,32 +33,9 @@ const Home = () => {
   const WaitngForDriverref = useRef(null);
 
   const { socket } = useContext(SocketContext);
-  const { setuser } = useContext(UserContextData);
   const navigate = useNavigate();
 
-  const GetUser = async () => {
-    const res = await axios.get(`http://localhost:3000/users/profile`, {
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    if (res.status === 201) {
-      console.log(res.data);
-      setuser(res.data.user);
-      socket.emit("join", { userType: "user", userId: res.data.user._id });
-    } else {
-      setuser({
-        fullName: {
-          firstName: "",
-          lastName: "",
-        },
-        email: "",
-      });
-      navigate("/userlogin");
-    }
-  };
+  
 
   socket.on("ride-accept", (data) => {
     setRide(data);
@@ -73,9 +49,7 @@ const Home = () => {
     navigate("/riding", { state: { ride: data } });
   });
 
-  useEffect(() => {
-    GetUser();
-  }, []);
+
 
   const submitHandler = async () => {
     const res = await axios.get(`http://localhost:3000/rides/get-fares`, {
