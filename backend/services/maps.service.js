@@ -62,7 +62,7 @@ module.exports.getAutoCompeteSuggestions = async (input) => {
     const response = await axios.get(url);
 
     if (response.data.status == "OK") {
-      return response.data.predictions;
+      return response.data.predictions.map(prediction => prediction.description).filter(value => value);
     } else {
       throw new Error("unable to fetch data");
     }

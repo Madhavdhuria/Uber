@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const LocationSearchPanel = (props) => {
-  const {
-    pickup,
-    destination,
-    setPickup,
-    setDestination,
-    activeInput,
-  } = props;
+  const { pickup, destination, setPickup, setDestination, activeInput } = props;
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -26,13 +20,7 @@ const LocationSearchPanel = (props) => {
           withCredentials: true,
         }
       );
-
-      const detailedSuggestions = response.data.map((suggestion) => ({
-        ...suggestion,
-        fullDescription: `${suggestion.description}, ${suggestion.structured_formatting.secondary_text}`,
-      }));
-
-      setSuggestions(detailedSuggestions);
+      setSuggestions(response.data);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
       setSuggestions([]);
@@ -44,16 +32,16 @@ const LocationSearchPanel = (props) => {
     const query = activeInput === "pickup" ? pickup : destination;
     const timeoutId = setTimeout(() => {
       fetchSuggestions(query);
-    }, 300);
+    }, 600);
 
     return () => clearTimeout(timeoutId);
   }, [pickup, destination, activeInput]);
 
   const handleSuggestionClick = (suggestion) => {
     if (activeInput === "pickup") {
-      setPickup(suggestion.fullDescription);
+      setPickup(suggestion);
     } else {
-      setDestination(suggestion.fullDescription);
+      setDestination(suggestion);
     }
   };
 
@@ -73,7 +61,9 @@ const LocationSearchPanel = (props) => {
             <div className="bg-[#f3f4f6] h-10 flex items-center justify-center w-12 rounded-full shadow-lg">
               <i className="ri-map-pin-fill text-lg text-gray-600"></i>
             </div>
-            <h4 className="font-medium text-gray-800">{suggestion.fullDescription}</h4>
+            <h4 className="font-medium text-gray-800">
+              {suggestion}
+            </h4>
           </div>
         ))
       ) : (
