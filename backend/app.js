@@ -17,7 +17,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://uber-9v2o.vercel.app/",
     credentials: true,
   })
 );
