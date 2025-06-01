@@ -1,4 +1,4 @@
-const CreateRideSchema = require("../ZodSchema/zodRideSchema");
+const CreateRideSchema = require("../ZodSchema/ZodRideSchema");
 const getFare = require("../services/ride.services");
 const RideServices = require("../services/ride.services");
 const Mapservices = require("../services/maps.service");
