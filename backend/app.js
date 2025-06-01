@@ -31,6 +31,4 @@ app.use("/captains", CaptainRoutes);
 app.use("/maps", Maproutes);
 app.use("/rides", RideRoutes);
 
-app.listen(port, () => {
-  console.log(`✅ Server running at ${port}`);
-});
+module.exports = app;
