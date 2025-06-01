@@ -7,7 +7,7 @@ import UserSignup from "./pages/UserSignup";
 import CaptainLogin from "./pages/CaptainLogin";
 import CaptainSignup from "./pages/CaptainSignup";
 import UserProtected from "./pages/UserProtected";
-import CaptainProtected from "./pages/captainProtected";
+import CaptainProtected from "./pages/CaptainProtected";
 import CaptainHome from "./pages/CaptainHome";
 import Riding from "./pages/Riding";
 import CaptainRiding from "./pages/CaptainRiding";
