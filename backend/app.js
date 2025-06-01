@@ -17,7 +17,8 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://uber-9v2o.vercel.app/",
+    origin: "https://uber-9v2o.vercel.app",
+    // 'https://uber-9v2o.vercel.app'
     credentials: true,
   })
 );
