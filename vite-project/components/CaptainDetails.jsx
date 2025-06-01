@@ -4,7 +4,6 @@ import { CaptainContextdata } from "../src/context/CaptainContext";
 
 const CaptainDetails = () => {
   const {captain}=useContext(CaptainContextdata);
-  console.log(captain);
   
   return (
     <div>

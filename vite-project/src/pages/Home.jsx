@@ -34,8 +34,8 @@ const Home = () => {
 
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
-
-  
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  const token = localStorage.getItem("token");
 
   socket.on("ride-accept", (data) => {
     setRide(data);
@@ -44,20 +44,20 @@ const Home = () => {
   });
 
   socket.on("start-ride", (data) => {
-    console.log("ride:- ",data);
-    
+    console.log("ride:- ", data);
+
     navigate("/riding", { state: { ride: data } });
   });
 
-
-
   const submitHandler = async () => {
-    const res = await axios.get(`http://localhost:3000/rides/get-fares`, {
-      params: {
-        pickUp: pickup,
-        destination: destination,
-      },
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get(`${baseUrl}/rides/get-fares`, {
+      params: { pickUp: pickup, destination: destination },
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (res.status === 201) {
@@ -71,7 +71,7 @@ const Home = () => {
 
   const CreateRide = async () => {
     const res = await axios.post(
-      `http://localhost:3000/rides/create`,
+      `${baseUrl}/rides/create`,
       {
         pickUp: pickup,
         destination: destination,
@@ -79,6 +79,9 @@ const Home = () => {
       },
       {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 

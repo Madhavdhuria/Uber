@@ -35,7 +35,6 @@ const VehiclePanel = (props) => {
 
   return (
     <div className="max-h-[85vh] h-full overflow-y-auto pb-safe bg-white rounded-t-3xl shadow-lg">
-      {/* Header Section */}
       <div className="flex flex-col justify-center items-center sticky top-0 z-10 bg-white pt-4 pb-3 px-6 border-b rounded-t-3xl shadow-sm">
         <h3 className="text-xl font-bold text-center text-gray-800">
           Choose a Vehicle

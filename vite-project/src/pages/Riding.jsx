@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 
 const Riding = () => {
-  const location = useLocation(); // Use the useLocation hook
-  const { ride } = location.state || {}; // Access state safely
+  const location = useLocation();
+  const { ride } = location.state || {}; 
 
   return (
     <div className="h-screen">

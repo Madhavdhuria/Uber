@@ -5,10 +5,10 @@ import gsap from "gsap";
 import FinishRide from "../../components/FinishRide";
 
 const CaptainRiding = () => {
-  const location = useLocation(); // Access location using the hook
+  const location = useLocation(); 
   const [finishRidePanel, setFinishRidePanel] = useState(false);
   const finishRidePanelRef = useRef(null);
-  const rideData = location.state?.ride; // Safely access ride data
+  const rideData = location.state?.ride; 
 const navigate=useNavigate();
 
   useGSAP(
@@ -28,7 +28,6 @@ const navigate=useNavigate();
 
   return (
     <div className="h-screen relative flex flex-col justify-end">
-      {/* Header */}
       <div className="fixed p-6 top-0 flex items-center justify-between w-screen">
         <img
           className="w-16"
@@ -43,7 +42,6 @@ const navigate=useNavigate();
         </Link>
       </div>
 
-      {/* Background Image */}
       <div className="h-4/5">
         <img
           className="h-full w-full object-cover"
@@ -52,7 +50,6 @@ const navigate=useNavigate();
         />
       </div>
 
-      {/* Ride Info */}
       <div
         className="h-1/5 p-6 flex items-center justify-between relative bg-yellow-400 pt-10"
         onClick={() => {
@@ -71,7 +68,6 @@ const navigate=useNavigate();
         </button>
       </div>
 
-      {/* Finish Ride Panel */}
       <div
         ref={finishRidePanelRef}
         className="fixed w-full z-[500] bottom-0 translate-y-full bg-white px-3 py-10 pt-12"

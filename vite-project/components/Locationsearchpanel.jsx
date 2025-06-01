@@ -6,27 +6,36 @@ const LocationSearchPanel = (props) => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchSuggestions = async (query) => {
-    if (!query) {
-      setSuggestions([]);
-      return;
-    }
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/maps/get-suggestions?input=${query}`,
-        {
-          withCredentials: true,
-        }
-      );
-      setSuggestions(response.data);
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-      setSuggestions([]);
-    }
-    setLoading(false);
-  };
+  const fetchSuggestions = async (query) => {
+  if (!query) {
+    setSuggestions([]);
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get(
+      `${baseUrl}/maps/get-suggestions?input=${encodeURIComponent(query)}`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setSuggestions(response.data);
+  } catch (error) {
+    console.error("Error fetching suggestions:", error);
+    setSuggestions([]);
+  }
+  setLoading(false);
+};
+
 
   useEffect(() => {
     const query = activeInput === "pickup" ? pickup : destination;
@@ -61,9 +70,7 @@ const LocationSearchPanel = (props) => {
             <div className="bg-[#f3f4f6] h-10 flex items-center justify-center w-12 rounded-full shadow-lg">
               <i className="ri-map-pin-fill text-lg text-gray-600"></i>
             </div>
-            <h4 className="font-medium text-gray-800">
-              {suggestion}
-            </h4>
+            <h4 className="font-medium text-gray-800">{suggestion}</h4>
           </div>
         ))
       ) : (

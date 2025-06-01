@@ -11,9 +11,11 @@ const UserProtected = ({ children }) => {
   const { setuser } = useContext(UserContextData);
   const [loading, setLoading] = useState(true);
 
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
   const GetUser = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/users/profile`, {
+      const res = await axios.get(`${baseUrl}/users/profile`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
