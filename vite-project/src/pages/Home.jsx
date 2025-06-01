@@ -6,7 +6,7 @@ import Locationsearchpanel from "../../components/Locationsearchpanel";
 import VehiclePanel from "../../components/VehiclePanel";
 import ConfirmRidePanel from "../../components/ConfirmRidePanel";
 import LookingForDriver from "../../components/LookingForDriver";
-import WaitingForDriver from "../../components/WaitingFordriver";
+import WaitingForDriver from "../../components/WaitingForDriver";
 import { useContext } from "react";
 import { SocketContext } from "../context/SocketContext";
 import axios from "axios";
