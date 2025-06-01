@@ -40,12 +40,15 @@ const CaptainHome = () => {
 
   const GetCaptainDetails = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/captains/profile`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (res.status === 201) {
         setcaptain(res.data.captain);
@@ -74,6 +77,12 @@ const CaptainHome = () => {
       const updateLocation = () => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
+            console.log("Updating location for captain:", captain._id);
+            console.log("New location:", {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+
             socket.emit("update-location-captain", {
               userId: captain._id,
               location: {
@@ -95,12 +104,15 @@ const CaptainHome = () => {
 
   const CaptainLogout = async () => {
     try {
-      let res = await axios.get(`${import.meta.env.VITE_BASE_URL}/captains/logout`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      });
+      let res = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/captains/logout`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
 
       if (res.status === 200) {
         localStorage.removeItem("token");
@@ -133,7 +145,10 @@ const CaptainHome = () => {
         setConfirmRidePopupPanel(true);
       }
     } catch (error) {
-      console.error("Error accepting ride:", error.response?.data || error.message);
+      console.error(
+        "Error accepting ride:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -150,7 +165,10 @@ const CaptainHome = () => {
           src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
           alt="Uber Logo"
         />
-        <button onClick={CaptainLogout} className="h-10 w-10 bg-white rounded-full">
+        <button
+          onClick={CaptainLogout}
+          className="h-10 w-10 bg-white rounded-full"
+        >
           <i className="text-lg font-medium ri-logout-box-r-line"></i>
         </button>
       </div>
