@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import axios from "axios";
 import { useContext } from "react";
-import { UserContextData } from "../context/userContext";
+import { UserContextData } from "../context/UserContext";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState({ firstName: "", lastName: "" });
