@@ -12,6 +12,7 @@ import CaptainHome from "./pages/CaptainHome";
 import Riding from "./pages/Riding";
 import CaptainRiding from "./pages/CaptainRiding";
 import ScreenTooBig from "../components/ScreenTooBig";
+// import MapView from "./pages/Mapview";
 
 const App = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 500);
@@ -42,7 +43,7 @@ const App = () => {
         path="/home"
         element={
           <UserProtected>
-            <Home />
+            <Home/>
           </UserProtected>
         }
       />

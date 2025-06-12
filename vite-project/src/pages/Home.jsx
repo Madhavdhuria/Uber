@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { SocketContext } from "../context/SocketContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import MapView from "./Mapview";
 
 const Home = () => {
   const [pickup, setpickup] = useState("");
@@ -181,13 +182,10 @@ const Home = () => {
         src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
         alt="Uber Logo"
       />
-      <div className="h-screen w-screen">
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt="Background"
-        />
+      <div className="h-full w-full absolute top-0 left-0 z-0">
+        <MapView />
       </div>
+
       <div className="flex flex-col justify-end h-screen absolute top-0 w-full">
         <div className="h-[40%] p-6 bg-white relative">
           <h5
