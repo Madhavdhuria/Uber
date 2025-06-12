@@ -1,6 +1,6 @@
 const RidePopUp = (props) => {
   return (
-    <div>
+    <div className="">
       <h5
         className="p-1 text-center w-[93%] absolute top-0"
         onClick={() => {

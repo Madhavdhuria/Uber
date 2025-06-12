@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ConfirmRidePopUp from "../../components/ConfirmRidePopUp";
 import { SocketContext } from "../context/SocketContext";
+import MapView from "./Mapview";
 
 const CaptainHome = () => {
   const [ridePopupPanel, setRidePopupPanel] = useState(false);
@@ -19,6 +20,12 @@ const CaptainHome = () => {
 
   const ridePopupPanelRef = useRef(null);
   const confirmRidePopupPanelRef = useRef(null);
+
+  const getMapHeight = () => {
+    if (confirmRidePopupPanel) return "h-[5vh]";
+    if (ridePopupPanel) return "h-[30vh]";
+    return "h-[60vh]";
+  };
 
   useGSAP(
     function () {
@@ -172,13 +179,16 @@ const CaptainHome = () => {
           <i className="text-lg font-medium ri-logout-box-r-line"></i>
         </button>
       </div>
-
-      <div className="h-3/5">
-        <img
+      {/* <img
           className="h-full w-full object-cover"
           src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
           alt="Map Animation"
-        />
+        /> */}
+
+      <div
+        className={`${getMapHeight()} transition-all duration-300 ease-in-out`}
+      >
+        <MapView />
       </div>
 
       <div className="h-2/5 p-4">

@@ -65,7 +65,7 @@ const LocationSearchPanel = (props) => {
           <div
             onClick={() => handleSuggestionClick(suggestion)}
             key={index}
-            className="flex gap-4 border-2 p-4 border-gray-200 active:border-black rounded-xl items-center my-2 justify-start hover:bg-gray-100 transition duration-200 ease-in-out"
+            className="flex gap-4 border-2 p-4 border-gray-200 active:border-black rounded-xl items-center my-2 justify-start hover:bg-gray-100 transition duration-200 ease-in-out cursor-pointer"
           >
             <div className="bg-[#f3f4f6] h-10 flex items-center justify-center w-12 rounded-full shadow-lg">
               <i className="ri-map-pin-fill text-lg text-gray-600"></i>

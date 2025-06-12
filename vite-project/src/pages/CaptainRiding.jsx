@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import FinishRide from "../../components/FinishRide";
+import MapView from "./Mapview";
 
 const CaptainRiding = () => {
   const location = useLocation(); 
@@ -43,11 +44,7 @@ const navigate=useNavigate();
       </div>
 
       <div className="h-4/5">
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt="Background"
-        />
+        <MapView />
       </div>
 
       <div
