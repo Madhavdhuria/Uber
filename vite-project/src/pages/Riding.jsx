@@ -1,9 +1,10 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import MapView from "./Mapview";
 
 const Riding = () => {
   const location = useLocation();
-  const { ride } = location.state || {}; 
-
+  const { ride } = location.state || {};
+  const navigate = useNavigate();
   return (
     <div className="h-screen">
       <Link
@@ -13,11 +14,7 @@ const Riding = () => {
         <i className="text-lg font-medium ri-home-5-line"></i>
       </Link>
       <div className="h-1/2">
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt=""
-        />
+        <MapView />
       </div>
       <div className="h-1/2 p-4">
         <div className="flex items-center justify-between">
@@ -57,7 +54,12 @@ const Riding = () => {
             </div>
           </div>
         </div>
-        <button className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg" >
+        <button
+          onClick={() => {
+            navigate("/home");
+          }}
+          className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg"
+        >
           Make a Payment
         </button>
       </div>
