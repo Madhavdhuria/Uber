@@ -133,15 +133,12 @@ const Home = () => {
         alt="Uber Logo"
       />
 
-      {/* MapView with z-0 */}
       <div className="h-full w-full absolute top-0 left-0 z-0">
         <MapView />
       </div>
 
-      {/* Panels wrapper: pointer-events-none allows map below to be clickable */}
       <div className="flex flex-col justify-end h-screen absolute top-0 w-full pointer-events-none">
 
-        {/* Form Panel */}
         <div className="h-[40%] p-6 bg-white relative pointer-events-auto">
           <h5
             ref={arrowref}
@@ -183,7 +180,6 @@ const Home = () => {
           </button>
         </div>
 
-        {/* Location Search Panel */}
         <div ref={panelRef} className="bg-white h-0 transition-all pointer-events-auto">
           <Locationsearchpanel
             setOpenPanel={setOpenPanel}
