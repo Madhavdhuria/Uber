@@ -16,8 +16,8 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://uberfrontend-three.vercel.app",
-    // origin: "http://localhost:5173",
+    // origin: "https://ccp2gknv-5173.inc1.devtunnels.ms",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -32,3 +32,4 @@ app.use("/maps", Maproutes);
 app.use("/rides", RideRoutes);
 
 module.exports = app;
+

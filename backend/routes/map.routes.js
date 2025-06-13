@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get(
   "/get-coordinates",
-  AuthMiddleware.authUser,
+  // AuthMiddleware.authUser,
   MapController.getCoordinates
 );
 router.get(

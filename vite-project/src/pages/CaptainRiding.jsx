@@ -3,7 +3,8 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import FinishRide from "../../components/FinishRide";
-import MapView from "./Mapview";
+// import MapView from "./Mapview";
+import RidingMap from "./RidingMap";
 
 const CaptainRiding = () => {
   const location = useLocation(); 
@@ -44,7 +45,7 @@ const navigate=useNavigate();
       </div>
 
       <div className="h-4/5">
-        <MapView />
+        <RidingMap data={rideData} />
       </div>
 
       <div

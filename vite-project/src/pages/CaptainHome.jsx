@@ -179,11 +179,6 @@ const CaptainHome = () => {
           <i className="text-lg font-medium ri-logout-box-r-line"></i>
         </button>
       </div>
-      {/* <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt="Map Animation"
-        /> */}
 
       <div
         className={`${getMapHeight()} transition-all duration-300 ease-in-out`}

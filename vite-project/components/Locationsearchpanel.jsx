@@ -41,7 +41,7 @@ const LocationSearchPanel = (props) => {
     const query = activeInput === "pickup" ? pickup : destination;
     const timeoutId = setTimeout(() => {
       fetchSuggestions(query);
-    }, 300);
+    }, 1500);
 
     return () => clearTimeout(timeoutId);
   }, [pickup, destination, activeInput]);
