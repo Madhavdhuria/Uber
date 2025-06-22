@@ -97,19 +97,20 @@ module.exports.StartRide = async (req, res) => {
   const { otp, RideId } = req.body;
 
   if (!otp) {
-    res.status(203).json({
-      message: "Otp required",
-    });
+    return res.status(400).json({ message: "OTP required" });
   }
 
-  const Ride = await RideServices.StartRide(otp, RideId);
+  try {
+    const Ride = await RideServices.StartRide(otp, RideId);
 
-  sendMessagetoSocketId(Ride.user.socketId, {
-    event: "start-ride",
-    data: Ride,
-  });
+    sendMessagetoSocketId(Ride.user.socketId, {
+      event: "start-ride",
+      data: Ride,
+    });
 
-  return res.status(201).json({
-    Ride,
-  });
+    return res.status(201).json({ Ride });
+  } catch (error) {
+    console.error("StartRide error:", error.message);
+    return res.status(500).json({ message: error.message || "Internal Server Error" });
+  }
 };

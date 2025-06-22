@@ -45,8 +45,6 @@ module.exports.RegisterUser = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000 
   });
   
-
-
     return res.status(201).json({
       message: "User registered successfully",
       token,
@@ -59,6 +57,7 @@ module.exports.RegisterUser = async (req, res) => {
         email: user.email,
       },
     });
+    
   } catch (error) {
     console.error("Registration failed:", error.message);
     return res.status(500).json({

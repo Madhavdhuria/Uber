@@ -102,18 +102,26 @@ module.exports.UpdateRide = async (CaptainId, RideId) => {
   }
 };
 
-module.exports.StartRide = async (otp, Rideid) => {
+module.exports.StartRide = async (otp, RideId) => {
   try {
-    const ride = await RideModel.findById(Rideid).select("+otp").populate('user').populate('captain');
+    const ride = await RideModel.findById(RideId)
+      .select("+otp")
+      .populate("user")
+      .populate("captain");
 
-    if (ride.otp === otp) {
-      ride.status = "ongoing";
-    } else {
-      throw Error("Wrong otp!");
+    if (!ride) {
+      throw new Error("Ride not found");
     }
 
+    if (ride.otp !== otp) {
+      throw new Error("Wrong OTP!");
+    }
+
+    ride.status = "ongoing";
+    await ride.save(); 
+    
     return ride;
   } catch (error) {
-    throw Error("Failed to Update Ride in Start Ride");
+    throw new Error(error.message || "Failed to start ride");
   }
 };

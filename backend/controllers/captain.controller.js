@@ -51,6 +51,7 @@ module.exports.RegisterCaptain = async (req, res) => {
       newCaptain,
       token,
     });
+    
   } catch (error) {
     return res.status(500).json({
       success: false,
